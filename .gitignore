@@ -2,3 +2,5 @@
 *.log
 .vscode
 __*
+.credentials
+**/tests
