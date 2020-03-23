@@ -1,3 +1,6 @@
+from selenium.webdriver.support.ui import Select
+import time
+
 def extract_links_from_tabella_condomini(tabella_condomini) -> dict:
     '''
     tabella_condomini is a WebElement representation of a table
