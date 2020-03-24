@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.action_chains import ActionChains
 import time
 import os
 import postetools
@@ -26,10 +27,52 @@ def scarica_movimenti(pagina_movimenti):
     options = Select(pagina_movimenti.find_element_by_id("rapporti"))
     options.select_by_index(1)
 
+    # Fill form date
+    d, m, y = postetools.calculate_start_date()
+    giorno_inizio = pagina_movimenti.find_element_by_xpath(XPATHS["movimenti_form_giorno"])
+    giorno_inizio.clear()
+    giorno_inizio.send_keys(d)
+    giorno_inizio.send_keys(Keys.TAB)
+    actions = ActionChains(pagina_movimenti)
+    actions.send_keys(m)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(y)
+    actions.perform()
+
+    # Download file
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.RETURN)
+    actions.perform()
+    time.sleep(1)
+    pagina_movimenti.back()
+    time.sleep(1)
+
+    giorno_inizio = pagina_movimenti.find_element_by_xpath(XPATHS["movimenti_form_giorno"])
+    giorno_inizio.clear()
+    giorno_inizio.send_keys(d)
+    actions = ActionChains(pagina_movimenti)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB) 
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.RETURN)
+    actions.perform()
+    time.sleep(5)
+    # DENTRO ALLA PAGINA DOWNLOAD
+
+
     # Remember to exit the frames
     pagina_movimenti.switch_to.parent_frame()
     pagina_movimenti.switch_to.parent_frame()
-    print(pagina_movimenti.page_source)
 
 
 if __name__ == "__main__":

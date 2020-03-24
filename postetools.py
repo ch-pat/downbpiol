@@ -1,5 +1,6 @@
 from selenium.webdriver.support.ui import Select
 import time
+from datetime import datetime, timedelta
 
 def extract_links_from_tabella_condomini(tabella_condomini) -> dict:
     '''
@@ -37,3 +38,17 @@ def get_xpaths() -> dict:
             name, path = line.split()
             xpaths[name] = path
     return xpaths
+
+def calculate_start_date() -> (str, str, str):
+    '''
+    finds starting date for forms
+    --for a first version, this simply gives the date 15 days ago
+    --next versions must keep track of latest download via script
+    '''
+    cur = datetime.today()
+    two_weeks = timedelta(days=15)
+    start_date = cur - two_weeks
+    return str(start_date.day), str(start_date.month), str(start_date.year)
+
+    
+    
