@@ -6,7 +6,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-#from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select
 import time
 import os
 import postetools
@@ -17,11 +17,20 @@ AZIENDA, USERNAME, PASSWORD = postetools.get_credentials()
 XPATHS = postetools.get_xpaths()
 
 
-def scarica_movimenti(frame_movimenti):
-    #TODO: SELECTION DOESNT WORK AT ALL; decide if it's needed or if need to find a way to make it work
-    conto = frame_movimenti.find_element_by_xpath(XPATHS["movimenti_drop_down_conto"])
-    conto.click()
-    time.sleep(5)
+def scarica_movimenti(pagina_movimenti):
+    # Enter form frame
+    pagina_movimenti.switch_to.frame("frSERVIZI")
+    pagina_movimenti.switch_to.frame("frMAIN")
+
+    # Operate on the form
+    options = Select(pagina_movimenti.find_element_by_id("rapporti"))
+    options.select_by_index(1)
+
+    # Remember to exit the frames
+    pagina_movimenti.switch_to.parent_frame()
+    pagina_movimenti.switch_to.parent_frame()
+    print(pagina_movimenti.page_source)
+
 
 if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
@@ -82,8 +91,7 @@ if __name__ == "__main__":
         # Vai a scarica movimenti
         driver.get(URL_ESPORTA_MOVIMENTI)
         time.sleep(2)
-        frame_movimenti = driver.find_element_by_name("frSERVIZI")
-        driver.switch_to.frame(frame_movimenti)
+        scarica_movimenti(driver)
         time.sleep(2)
 
         # All done with the current condominio, go back to selection
