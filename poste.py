@@ -11,6 +11,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 import os
 import postetools
+import drivertools
 
 LOGIN_PAGE = "https://idp-bpiol.poste.it/jod-idp-bpiol/cas/login.html"
 URL_ESPORTA_MOVIMENTI = "https://bancopostaimpresaonline.poste.it/bpiol1/YCC.do?method=home&FUNCTIONCODESELECTED=YCC"
@@ -39,7 +40,7 @@ def scarica_movimenti(pagina_movimenti):
     actions.send_keys(y)
     actions.perform()
 
-    # Download file
+    # Export file
     actions.send_keys(Keys.TAB)
     actions.send_keys(Keys.TAB)
     actions.send_keys(Keys.TAB)
@@ -48,9 +49,11 @@ def scarica_movimenti(pagina_movimenti):
     actions.send_keys(Keys.RETURN)
     actions.perform()
     time.sleep(1)
+
     pagina_movimenti.back()
     time.sleep(1)
 
+    # Go to download page
     giorno_inizio = pagina_movimenti.find_element_by_xpath(XPATHS["movimenti_form_giorno"])
     giorno_inizio.clear()
     giorno_inizio.send_keys(d)
@@ -66,8 +69,13 @@ def scarica_movimenti(pagina_movimenti):
     actions.send_keys(Keys.TAB)
     actions.send_keys(Keys.RETURN)
     actions.perform()
+    time.sleep(2)
+
+    # Download file
+    download_button = pagina_movimenti.find_element_by_xpath(XPATHS["ultimo_cbi"])
+    download_button.click()
     time.sleep(5)
-    # DENTRO ALLA PAGINA DOWNLOAD
+    exit()
 
 
     # Remember to exit the frames
@@ -78,13 +86,13 @@ def scarica_movimenti(pagina_movimenti):
 if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
 
-    # headless options, uncomment for headless
-    # options = Options()
-    # options.headless = True
-    # driver = webdriver.Firefox(executable_path=gecko, options=options)
+    # False for Dev, True for release
+    headless = False
+    options = drivertools.set_options(headless)
 
-    # headed for dev
-    driver = webdriver.Firefox(executable_path=gecko)
+    driver = webdriver.Firefox(executable_path=gecko, options=options)
+
+   
 
     # Get login page and wait for it to load
     driver.get(LOGIN_PAGE)    
