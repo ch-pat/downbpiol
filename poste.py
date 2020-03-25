@@ -72,6 +72,7 @@ def scarica_movimenti(pagina_movimenti):
     time.sleep(2)
 
     # Download file
+    #TODO: this sometimes does not work. Seems to be caused by a bigger delay when using driver.back()
     download_button = pagina_movimenti.find_element_by_xpath(XPATHS["ultimo_cbi"])
     download_button.click()
     time.sleep(5)
