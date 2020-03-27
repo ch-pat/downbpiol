@@ -17,12 +17,13 @@ LOGIN_PAGE = "https://idp-bpiol.poste.it/jod-idp-bpiol/cas/login.html"
 URL_ESPORTA_MOVIMENTI = "https://bancopostaimpresaonline.poste.it/bpiol1/YCC.do?method=home&FUNCTIONCODESELECTED=YCC"
 AZIENDA, USERNAME, PASSWORD = postetools.get_credentials()
 XPATHS = postetools.get_xpaths()
-
+#SCRIPT_START = time.time()
 
 def scarica_movimenti(pagina_movimenti):
     # Enter form frame
-    pagina_movimenti.switch_to.frame("frSERVIZI")
-    pagina_movimenti.switch_to.frame("frMAIN")
+    wait = WebDriverWait(pagina_movimenti, 30)
+    wait.until(EC.frame_to_be_available_and_switch_to_it(((By.NAME, "frSERVIZI"))))
+    wait.until(EC.frame_to_be_available_and_switch_to_it(((By.NAME, "frMAIN"))))
 
     # Operate on the form
     options = Select(pagina_movimenti.find_element_by_id("rapporti"))
@@ -38,7 +39,6 @@ def scarica_movimenti(pagina_movimenti):
     actions.send_keys(m)
     actions.send_keys(Keys.TAB)
     actions.send_keys(y)
-    actions.perform()
 
     # Export file
     actions.send_keys(Keys.TAB)
@@ -46,14 +46,15 @@ def scarica_movimenti(pagina_movimenti):
     actions.send_keys(Keys.TAB)
     actions.send_keys(Keys.TAB)
     actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
     actions.send_keys(Keys.RETURN)
     actions.perform()
+    actions.reset_actions()
     time.sleep(1)
-
     pagina_movimenti.back()
-    time.sleep(1)
 
     # Go to download page
+    wait.until(EC.visibility_of_element_located((By.XPATH, XPATHS["movimenti_form_giorno"])))
     giorno_inizio = pagina_movimenti.find_element_by_xpath(XPATHS["movimenti_form_giorno"])
     giorno_inizio.clear()
     giorno_inizio.send_keys(d)
@@ -69,19 +70,18 @@ def scarica_movimenti(pagina_movimenti):
     actions.send_keys(Keys.TAB)
     actions.send_keys(Keys.RETURN)
     actions.perform()
-    time.sleep(2)
 
     # Download file
-    #TODO: this sometimes does not work. Seems to be caused by a bigger delay when using driver.back()
+    wait.until(EC.element_to_be_clickable((By.XPATH, XPATHS["ultimo_cbi"])))
     download_button = pagina_movimenti.find_element_by_xpath(XPATHS["ultimo_cbi"])
     download_button.click()
-    time.sleep(5)
-    exit()
-
+    # TODO: implement file rename here by grabbing file name from table; decide how to manage download folder
+    time.sleep(1)
 
     # Remember to exit the frames
     pagina_movimenti.switch_to.parent_frame()
     pagina_movimenti.switch_to.parent_frame()
+    return
 
 
 if __name__ == "__main__":
@@ -113,21 +113,17 @@ if __name__ == "__main__":
     form_username.send_keys(USERNAME)
     form_pwd.clear()
     form_pwd.send_keys(PASSWORD)
-    #print("Sent all keys")
-    time.sleep(2)
     form_pwd.send_keys(Keys.RETURN)
-    time.sleep(4)
 
     # Premere continua
+    wait.until(EC.element_to_be_clickable((By.XPATH, XPATHS["continua"])))
     continua_login_btn = driver.find_element_by_xpath(XPATHS["continua"])
     continua_login_btn.click()
 
     # Lista condomini
+    wait.until(EC.visibility_of_element_located((By.XPATH, XPATHS["tabella_condomini"])))    
     tabella_condomini = driver.find_element_by_xpath(XPATHS["tabella_condomini"])
-    time.sleep(2)
     link_condomini_diz = postetools.extract_links_from_tabella_condomini(tabella_condomini)
-    # for x in link_condomini_diz.items():
-    #     print(x[1].text, x[0])
 
     # For loop that for each item in link_condomini_diz must:
     # 1. download each item's bank account movements
@@ -136,22 +132,32 @@ if __name__ == "__main__":
     for x in range(len(link_condomini_diz.keys())):
         # Seleziona il condominio
         print("Logging into: " + list(link_condomini_diz.keys())[x])
-        time.sleep(2)
+        
+        '''
+        XXX this is an *IMPORTANT* wait, as longer wait times seem to influence whether or not
+        XXX the login asks for app authentication or not, with shorter times making the
+        XXX authentication way more likely to be needed.
+        XXX (crazy spaghetti code, Poste Italiane)
+        '''
+        time.sleep(2) #XXX
         link_condomini_diz[list(link_condomini_diz.keys())[x]].click()
         time.sleep(2)
 
         # Vai a scarica movimenti
         driver.get(URL_ESPORTA_MOVIMENTI)
-        time.sleep(2)
+        time.sleep(1)
         scarica_movimenti(driver)
-        time.sleep(2)
+        time.sleep(1)
 
         # All done with the current condominio, go back to selection
+        wait.until(EC.element_to_be_clickable((By.XPATH, XPATHS["cambio_azienda"])))
         cambio_azienda = driver.find_element_by_xpath(XPATHS["cambio_azienda"])
         cambio_azienda.click()
         
         #Re-get everything
-        time.sleep(4)
+        wait.until(EC.visibility_of_element_located((By.XPATH, XPATHS["tabella_condomini"])))    
         tabella_condomini = driver.find_element_by_xpath(XPATHS["tabella_condomini"])
         link_condomini_diz = postetools.extract_links_from_tabella_condomini(tabella_condomini)
         ###################
+
+#print(f"EXECUTION COMPLETE AFTER {time.time() - SCRIPT_START} SECONDS")
