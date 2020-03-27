@@ -5,3 +5,4 @@ funzioni_generali /html/body/div[1]/div[2]/div/div/div/div[3]/div/table[2]/tbody
 movimenti_drop_down_conto //*[@id="rapporti"]
 movimenti_form_giorno //*[@id="dataIniG"]
 ultimo_cbi /html/body/table[3]/tbody/tr[1]/td/table/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/a
+nome_ultimo_cbi /html/body/table[3]/tbody/tr[1]/td/table/tbody/tr[3]/td/table/tbody/tr[2]/td[1]

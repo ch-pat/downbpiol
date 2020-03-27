@@ -49,6 +49,3 @@ def calculate_start_date() -> (str, str, str):
     two_weeks = timedelta(days=15)
     start_date = cur - two_weeks
     return str(start_date.day), str(start_date.month), str(start_date.year)
-
-    
-    

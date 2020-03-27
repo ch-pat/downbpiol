@@ -23,3 +23,9 @@ def set_options(headless=False) -> Options:
     options.set_preference("pdfjs.disabled", True)
     options.set_headless(headless)
     return options
+
+def rename_file(original, condo_name):
+    path = r"C:\Users\Utente\Download"
+    original_file = os.path.join(path, original)
+    new_name = os.path.join(path, condo_name + ".zip")
+    os.rename(original_file, new_name)
