@@ -89,7 +89,7 @@ if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
 
     # False for Dev, True for release
-    headless = True
+    headless = False
     options = drivertools.set_options(headless)
 
     driver = webdriver.Firefox(executable_path=gecko, options=options)
