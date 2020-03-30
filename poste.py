@@ -147,7 +147,7 @@ if __name__ == "__main__":
         driver.get(URL_ESPORTA_MOVIMENTI)
         time.sleep(1)
         file_cbi = scarica_movimenti(driver)
-        drivertools.rename_file(file_cbi, nome_condo)
+        drivertools.rename_file(file_cbi, R"CBI\\" + nome_condo)
         time.sleep(1)
 
         # All done with the current condominio, go back to selection
