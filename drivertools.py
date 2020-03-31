@@ -28,5 +28,6 @@ def set_options(headless=False) -> Options:
 def rename_file(original, condo_name):
     original_file = os.path.join(DOWNLOAD_PATH, original)
     new_name = os.path.join(DOWNLOAD_PATH, condo_name + ".zip")
-    #TODO: use os.remove (?) to deal with old files, if present
+    if os.path.exists(new_name):
+        os.remove(new_name)
     os.renames(original_file, new_name)
