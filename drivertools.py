@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 import os
+import zipfile
 
 DOWNLOAD_PATH = os.path.join(os.path.abspath(os.curdir), "downloads")
 
@@ -27,7 +28,14 @@ def set_options(headless=False) -> Options:
 
 def rename_file(original, condo_name):
     original_file = os.path.join(DOWNLOAD_PATH, original)
-    new_name = os.path.join(DOWNLOAD_PATH, condo_name + ".zip")
+    new_name = os.path.join(DOWNLOAD_PATH, condo_name + ".txt")
+    extracted_file = os.path.join(DOWNLOAD_PATH, unzip_file(original_file))
     if os.path.exists(new_name):
         os.remove(new_name)
-    os.renames(original_file, new_name)
+    os.renames(extracted_file, new_name)
+    os.remove(original_file)
+
+def unzip_file(filename):
+    zfile = zipfile.ZipFile(filename)
+    zfile.extractall(path=os.path.dirname(filename))
+    return zfile.namelist()[0]
