@@ -3,6 +3,7 @@ from selenium.webdriver.firefox.options import Options
 import os
 import zipfile
 
+
 DOWNLOAD_PATH = os.path.join(os.path.abspath(os.curdir), "downloads")
 
 def set_options(headless=False) -> Options:

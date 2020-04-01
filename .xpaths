@@ -1,8 +1,0 @@
-continua /html/body/div[2]/div/div/div/div/div/div/div/div[3]/div/div/div/div/div/div[2]/div/div/div/div[2]/div/div/div/p/button
-tabella_condomini /html/body/div[2]/div/div/div/div/div/div/div[2]/div/div/div/div/div/div/div/div/div/form/div/table
-cambio_azienda /html/body/div[1]/div[2]/div/div/div/div[3]/div/table[1]/tbody/tr/td[2]/table/tbody/tr[1]/td[3]/p/a[3]
-funzioni_generali /html/body/div[1]/div[2]/div/div/div/div[3]/div/table[2]/tbody/tr/td[8]/a
-movimenti_drop_down_conto //*[@id="rapporti"]
-movimenti_form_giorno //*[@id="dataIniG"]
-ultimo_cbi /html/body/table[3]/tbody/tr[1]/td/table/tbody/tr[3]/td/table/tbody/tr[2]/td[2]/a
-nome_ultimo_cbi /html/body/table[3]/tbody/tr[1]/td/table/tbody/tr[3]/td/table/tbody/tr[2]/td[1]

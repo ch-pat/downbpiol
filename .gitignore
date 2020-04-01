@@ -1,7 +1,7 @@
 *.exe
 *.log
 .vscode
-__*
+__pycache__
 .credentials
 **/tests
 **/downloads
