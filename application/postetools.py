@@ -1,6 +1,6 @@
-from selenium.webdriver.support.ui import Select
-import time
 from datetime import datetime, timedelta
+import time
+
 
 def extract_links_from_tabella_condomini(tabella_condomini) -> dict:
     '''
@@ -20,24 +20,10 @@ def get_credentials() -> (str, str, str):
     needs a .credentials file in the directory
     returns (azienda, username, password)
     '''
-    with open(".credentials", "r") as f:
+    with open("application/config/.credentials", "r") as f:
         contents = f.read()
         creds = contents.splitlines()
     return creds[0], creds[1], creds[2]
-
-def get_xpaths() -> dict:
-    '''
-    needs a .xpaths file in the directory
-    returns a dictionary of xpaths
-    '''
-    #TODO: find some way to document the existing xpaths
-    xpaths = {}
-    with open(".xpaths", "r") as f:
-        contents = f.read()
-        for line in contents.splitlines():
-            name, path = line.split()
-            xpaths[name] = path
-    return xpaths
 
 def calculate_start_date() -> (str, str, str):
     '''
