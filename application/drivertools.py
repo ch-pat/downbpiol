@@ -7,13 +7,18 @@ import zipfile
 DOWNLOAD_PATH = os.path.join(os.path.abspath(os.curdir), "downloads")
 
 def set_options(headless=False) -> Options:
+    '''
+    Many content types are set to not show download dialogs to prevent headaches, but the main ones are the following:
+    CBI: application/unknown
+    896: application/x-download
+    '''
     options = Options()
     options.set_preference("browser.download.folderList", 2)
     options.set_preference("browser.download.dir", DOWNLOAD_PATH)
     options.set_preference("browser.download.forbid_open_with", True)
     options.set_preference("browser.download.manager.alertOnEXEOpen", False)
-    options.set_preference("browser.helperApps.neverAsk.openFile", "application/unknown, application/x-www-form-urlencoded, application/msword, application/csv, application/ris, text/csv, image/png, application/pdf, text/html, text/plain, application/zip, application/x-zip, application/x-zip-compressed, application/download, application/octet-stream")
-    options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/unknown, application/x-www-form-urlencoded, application/msword, application/csv, application/ris, text/csv, image/png, application/pdf, text/html, text/plain, application/zip, application/x-zip, application/x-zip-compressed, application/download, application/octet-stream")
+    options.set_preference("browser.helperApps.neverAsk.openFile", "application/unknown, application/x-www-form-urlencoded, application/msword, application/csv, application/ris, text/csv, image/png, application/pdf, text/html, text/plain, application/zip, application/x-zip, application/x-zip-compressed, application/download, application/x-download, application/octet-stream")
+    options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/unknown, application/x-www-form-urlencoded, application/msword, application/csv, application/ris, text/csv, image/png, application/pdf, text/html, text/plain, application/zip, application/x-zip, application/x-zip-compressed, application/download, application/x-download, application/octet-stream")
     options.set_preference("browser.download.manager.showWhenStarting", False)
     options.set_preference("browser.download.manager.focusWhenStarting", False)
     options.set_preference("browser.download.useDownloadDir", True)

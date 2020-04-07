@@ -73,3 +73,69 @@ def scarica_movimenti(pagina_movimenti) -> str:
     time.sleep(1)
 
     return filename
+
+def scarica_896(pagina_896) -> str:
+    '''
+    Downloads 896 file and returns the name of the file downloaded
+    '''
+    wait = WebDriverWait(pagina_896, 30)
+
+    # Choose account from drop down
+    wait.until(EC.presence_of_element_located((By.ID, "idAccount")))
+    options = Select(pagina_896.find_element_by_id("idAccount"))
+    options.select_by_index(1)
+
+    # Fill form date
+    d, m, y = postetools.calculate_start_date()
+    giorno_inizio = pagina_896.find_element_by_xpath(Xpaths.FORM_GIORNO_896)
+    giorno_inizio.clear()
+    giorno_inizio.send_keys(d)
+    giorno_inizio.send_keys(Keys.TAB)
+    actions = ActionChains(pagina_896)
+    actions.send_keys(m)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(y)
+
+    # Export file
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.RETURN)
+    actions.perform()
+    actions.reset_actions()
+    time.sleep(1)
+    pagina_896.back()
+
+    # Go to download page
+    wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.FORM_GIORNO_896)))
+    giorno_inizio = pagina_896.find_element_by_xpath(Xpaths.FORM_GIORNO_896)
+    giorno_inizio.clear()
+    giorno_inizio.send_keys(d)
+    giorno_inizio.send_keys(Keys.TAB)
+    actions = ActionChains(pagina_896)
+    actions.send_keys(m)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(y)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB) 
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.TAB)
+    actions.send_keys(Keys.RETURN)
+    actions.perform()
+
+    # Download file
+    wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.ULTIMO_896)))
+    download_button = pagina_896.find_element_by_xpath(Xpaths.ULTIMO_896)
+    download_button.click()
+    filename = pagina_896.find_element_by_xpath(Xpaths.NOME_ULTIMO_896).text
+    time.sleep(1)
+
+    return filename

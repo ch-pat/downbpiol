@@ -20,7 +20,7 @@ if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
 
     # False for Dev, True for release
-    headless = False
+    headless = True
     options = drivertools.set_options(headless)
 
     driver = webdriver.Firefox(executable_path=gecko, options=options)
@@ -81,8 +81,18 @@ if __name__ == "__main__":
         file_cbi = operations.scarica_movimenti(driver)
         drivertools.rename_file(file_cbi, R"CBI\\" + nome_condo)
         time.sleep(1)
+        print(f"Scaricato CBI per {nome_condo}...")
 
+        # Vai a scarica 896
+        driver.get(Urls.URL_ESPORTA_896)
+        time.sleep(1)
+        file_896 = operations.scarica_896(driver)
+        drivertools.rename_file(file_896, R"896\\" + nome_condo)
+        time.sleep(1)
+        print(f"Scaricato 896 per {nome_condo}...")
+        
         # All done with the current condominio, go back to selection
+        print(f"Fine elaborazione per {nome_condo}")
         driver.get(Urls.URL_CAMBIO_AZIENDA)
         
         #Re-get everything
