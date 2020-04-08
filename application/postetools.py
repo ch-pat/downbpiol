@@ -21,14 +21,17 @@ def get_credentials() -> (str, str, str):
     needs a .credentials file in the directory
     returns (azienda, username, password)
     '''
+    # Case for missing credentials / first run
     if not ".credentials" in os.listdir("application/config"):
         print("Credenziali mancanti! Verranno ora richieste le credenziali per l'accesso a BPIOL, assicurarsi di conoscere AZIENDA, USERNAME e PASSWORD.")
         return create_credentials()
-        
+
+    # Read existing credentials    
     with open("application/config/.credentials", "r") as f:
         contents = f.read()
         creds = contents.splitlines()
     
+    # Offer the opportunity to reset credentials
     print("Si sta per accedere con le seguenti credenziali:\n")
     print(f"AZIENDA:\t{creds[0]}")
     print(f"USERNAME:\t{creds[1]}")
@@ -37,6 +40,7 @@ def get_credentials() -> (str, str, str):
     if prompt in "qQ" and prompt != "":
         return create_credentials()
     
+    # Return already existing credentials if unmodified
     return creds[0], creds[1], creds[2]
 
 def calculate_start_date() -> (str, str, str):
