@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
-import time
+from getpass import getpass
+import time, os
 
 
 def extract_links_from_tabella_condomini(tabella_condomini) -> dict:
@@ -20,9 +21,22 @@ def get_credentials() -> (str, str, str):
     needs a .credentials file in the directory
     returns (azienda, username, password)
     '''
+    if not ".credentials" in os.listdir("application/config"):
+        print("Credenziali mancanti! Verranno ora richieste le credenziali per l'accesso a BPIOL, assicurarsi di conoscere AZIENDA, USERNAME e PASSWORD.")
+        return create_credentials()
+        
     with open("application/config/.credentials", "r") as f:
         contents = f.read()
         creds = contents.splitlines()
+    
+    print("Si sta per accedere con le seguenti credenziali:\n")
+    print(f"AZIENDA:\t{creds[0]}")
+    print(f"USERNAME:\t{creds[1]}")
+    print(f"PASSWORD:\t{'*' * len(creds[2])}")
+    prompt = input("Premere INVIO per confermare. Oppure, immettere Q per reimpostare le credenziali.")
+    if prompt in "qQ" and prompt != "":
+        return create_credentials()
+    
     return creds[0], creds[1], creds[2]
 
 def calculate_start_date() -> (str, str, str):
@@ -35,3 +49,20 @@ def calculate_start_date() -> (str, str, str):
     two_weeks = timedelta(days=15)
     start_date = cur - two_weeks
     return str(start_date.day), str(start_date.month), str(start_date.year)
+
+def create_credentials():
+    '''
+    Routine for setting login credentials for the first time of when resetting them
+    '''
+    prompt = "q"
+    while prompt in "qQ" and prompt != "":
+        azienda = input("Inserire AZIENDA:\t")
+        username = input("Inserire USERNAME:\t")
+        password = getpass("Inserire PASSWORD:\t")
+        prompt = input("Verificare le credenziali inserite. Se si desidera procedere, premere INVIO. Se si desidera re-inserire le credenziali, immettere Q.\n")
+    
+    #TODO: could add here a try to login and respond based on HTTP status code received
+    with open("application/config/.credentials", "w+") as f:
+        f.writelines(line + "\n" for line in (azienda, username, password))
+    print("Credenziali salvate")
+    return azienda, username, password
