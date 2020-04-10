@@ -20,7 +20,7 @@ if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
 
     # False for Dev, True for release
-    headless = False
+    headless = True
     options = drivertools.set_options(headless)
 
     driver = webdriver.Firefox(executable_path=gecko, options=options)
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         # Rimuovi avvisi indipendentemente dalla loro presenza o meno
         driver.get(Urls.URL_PER_PROSEGUIRE)
         time.sleep(1)
-        
+
         # Vai a scarica movimenti
         driver.get(Urls.URL_ESPORTA_MOVIMENTI)
         time.sleep(1)
