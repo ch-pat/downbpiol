@@ -6,6 +6,7 @@ class Urls():
     URL_ESPORTA_MOVIMENTI = "https://bancopostaimpresaonline.poste.it/bpiol1/YCC.do?method=home&FUNCTIONCODESELECTED=YCC"
     URL_CAMBIO_AZIENDA = "https://bancopostaimpresaonline.poste.it/bpiol1/login.do?method=cambioAzienda&MENUNAME=LOGIN%20OPERATORE&PAGENAME=&LNAME=cpw.gif&ALT_TEST=alt.cambio.azienda&FUNCTIONCODESELECTED=XXX"
     URL_ESPORTA_896 = "https://bancopostaimpresaonline.poste.it/bpiol1/loadDeSearch.do?method=loadDeSearchPage&MNAME=mname.cbi.esportadati&PNAME=pname.rendicontazionebollettiniincassati&LNAME=urb.gif&ALT_TEST=alt.esportazioni&FUNCTIONCODESELECTED=XEB"
+    URL_PER_PROSEGUIRE = "https://bancopostaimpresaonline.poste.it/bpiol1/login.do?method=openSession&gestisciMessaggiBloccanti=true"
 
 class Xpaths():
     CONTINUA = "/html/body/div[2]/div/div/div/div/div/div/div/div[3]/div/div/div/div/div/div[2]/div/div/div/div[2]/div/div/div/p/button"

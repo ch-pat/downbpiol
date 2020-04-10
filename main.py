@@ -20,7 +20,7 @@ if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
 
     # False for Dev, True for release
-    headless = True
+    headless = False
     options = drivertools.set_options(headless)
 
     driver = webdriver.Firefox(executable_path=gecko, options=options)
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     # 1. download each item's bank account movements
     # 2. download each item's 896 report (carefully choose starting date for these 2 items)
     # 3. print(?) the bank account movements
-    for x in range(len(link_condomini_diz.keys())):
+    for x in range(6, len(link_condomini_diz.keys())):
         # Seleziona il condominio
         nome_condo = list(link_condomini_diz.keys())[x]
         print("Logging into: " + nome_condo)
@@ -75,6 +75,10 @@ if __name__ == "__main__":
         link_condomini_diz[nome_condo].click()
         time.sleep(2)
 
+        # Rimuovi avvisi indipendentemente dalla loro presenza o meno
+        driver.get(Urls.URL_PER_PROSEGUIRE)
+        time.sleep(1)
+        
         # Vai a scarica movimenti
         driver.get(Urls.URL_ESPORTA_MOVIMENTI)
         time.sleep(1)

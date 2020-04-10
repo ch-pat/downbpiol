@@ -20,6 +20,7 @@ def scarica_movimenti(pagina_movimenti) -> str:
     wait.until(EC.frame_to_be_available_and_switch_to_it(((By.NAME, "frMAIN"))))
 
     # Operate on the form
+    wait.until(EC.presence_of_element_located ((By.ID, "rapporti")))
     options = Select(pagina_movimenti.find_element_by_id("rapporti"))
     options.select_by_index(1)
 
