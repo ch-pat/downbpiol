@@ -60,7 +60,7 @@ if __name__ == "__main__":
     # 1. download each item's bank account movements
     # 2. download each item's 896 report (carefully choose starting date for these 2 items)
     # 3. print(?) the bank account movements
-    for x in range(6, len(link_condomini_diz.keys())):
+    for x in range(len(link_condomini_diz.keys())):
         # Seleziona il condominio
         nome_condo = list(link_condomini_diz.keys())[x]
         print("Logging into: " + nome_condo)
