@@ -19,4 +19,5 @@ class Xpaths():
     NOME_ULTIMO_CBI = "/html/body/table[3]/tbody/tr[1]/td/table/tbody/tr[3]/td/table/tbody/tr[2]/td[1]"
     FORM_GIORNO_896 = '//*[@id="dataIniG"]'
     ULTIMO_896 = "/html/body/div[1]/table[1]/tbody/tr[3]/td/div/table[2]/tbody/tr/td/table/tbody/tr/td/table[2]/tbody/tr/td[2]/a"
-    NOME_ULTIMO_896 ="/html/body/div[1]/table[1]/tbody/tr[3]/td/div/table[2]/tbody/tr/td/table/tbody/tr/td/table[2]/tbody/tr/td[1]"
+    NOME_ULTIMO_896 = "/html/body/div[1]/table[1]/tbody/tr[3]/td/div/table[2]/tbody/tr/td/table/tbody/tr/td/table[2]/tbody/tr/td[1]"
+    CONTINUA_ERRORE_GENERICO = "/html/body/div[3]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/p[2]/button"

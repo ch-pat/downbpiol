@@ -140,3 +140,44 @@ def scarica_896(pagina_896) -> str:
     time.sleep(1)
 
     return filename
+
+def get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD) -> dict:
+    '''
+    wraps postetools.extract_links_from_tabella_condomini
+    returns a {"name": clickable_element} dict
+    '''
+    wait = WebDriverWait(driver, 30)
+    try:
+        wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))    
+        tabella_condomini = driver.find_element_by_xpath(Xpaths.TABELLA_CONDOMINI)
+        link_condomini_diz = postetools.extract_links_from_tabella_condomini(tabella_condomini)
+        return link_condomini_diz
+    except:
+        wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.CONTINUA_ERRORE_GENERICO)))  
+        continua_btn = driver.find_element_by_xpath(Xpaths.CONTINUA_ERRORE_GENERICO)  
+        continua_btn.click()
+        
+        # Ci riporta alla pagina di login, rifacciamo il login
+        wait.until(EC.visibility_of_element_located((By.ID, "azienda")))
+        form_azienda = driver.find_element_by_id("azienda")
+        form_username = driver.find_element_by_id("username")
+        form_pwd = driver.find_element_by_id("password")
+        time.sleep(2)
+
+        form_azienda.clear()
+        form_azienda.send_keys(AZIENDA)
+        form_username.clear()
+        form_username.send_keys(USERNAME)
+        form_pwd.clear()
+        form_pwd.send_keys(PASSWORD)
+        form_pwd.send_keys(Keys.RETURN)
+
+        wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.CONTINUA)))
+        continua_login_btn = driver.find_element_by_xpath(Xpaths.CONTINUA)
+        continua_login_btn.click()
+
+        wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))    
+        tabella_condomini = driver.find_element_by_xpath(Xpaths.TABELLA_CONDOMINI)
+        link_condomini_diz = postetools.extract_links_from_tabella_condomini(tabella_condomini)
+        return link_condomini_diz
+
