@@ -20,7 +20,7 @@ if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
 
     # False for Dev, True for release
-    headless = True
+    headless = False
     options = drivertools.set_options(headless)
 
     driver = webdriver.Firefox(executable_path=gecko, options=options)
@@ -52,9 +52,7 @@ if __name__ == "__main__":
     continua_login_btn.click()
 
     # Lista condomini
-    wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))    
-    tabella_condomini = driver.find_element_by_xpath(Xpaths.TABELLA_CONDOMINI)
-    link_condomini_diz = postetools.extract_links_from_tabella_condomini(tabella_condomini)
+    link_condomini_diz = operations.get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD)
 
     # For loop that for each item in link_condomini_diz must:
     # 1. download each item's bank account movements
@@ -100,9 +98,7 @@ if __name__ == "__main__":
         driver.get(Urls.URL_CAMBIO_AZIENDA)
         
         #Re-get everything
-        wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))    
-        tabella_condomini = driver.find_element_by_xpath(Xpaths.TABELLA_CONDOMINI)
-        link_condomini_diz = postetools.extract_links_from_tabella_condomini(tabella_condomini)
+        link_condomini_diz = operations.get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD)
         ###################
 
 print(f"EXECUTION COMPLETE AFTER {time.time() - SCRIPT_START} SECONDS")

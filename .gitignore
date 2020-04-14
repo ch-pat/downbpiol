@@ -5,3 +5,6 @@ __pycache__
 .credentials
 **/tests
 **/downloads
+**/dist
+**/build
+*.spec
