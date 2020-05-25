@@ -33,6 +33,7 @@ def set_options(headless=False) -> Options:
     return options
 
 def rename_file(original, condo_name):
+    original = sanitize_filename(original)
     original_file = os.path.join(DOWNLOAD_PATH, original)
     new_name = os.path.join(DOWNLOAD_PATH, condo_name + ".txt")
     extracted_file = os.path.join(DOWNLOAD_PATH, unzip_file(original_file))
@@ -45,3 +46,13 @@ def unzip_file(filename):
     zfile = zipfile.ZipFile(filename)
     zfile.extractall(path=os.path.dirname(filename))
     return zfile.namelist()[0]
+
+def sanitize_filename(filename: str) -> str:
+    '''
+    Removes all occurrences of illegal characters from the filename given
+    Returns sanitized filename
+    '''
+    illegal_chars = "><:\"/\\|?*"
+    for c in illegal_chars:
+        filename = filename.replace(c, "")
+    return filename
