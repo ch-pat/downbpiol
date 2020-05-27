@@ -23,8 +23,7 @@ def get_credentials() -> (str, str, str):
     '''
     # Case for missing credentials / first run
     if not ".credentials" in os.listdir("application/config"):
-        print("Credenziali mancanti! Verranno ora richieste le credenziali per l'accesso a BPIOL, assicurarsi di conoscere AZIENDA, USERNAME e PASSWORD.")
-        return create_credentials()
+        return None, None, None
 
     # Read existing credentials    
     with open("application/config/.credentials", "r") as f:

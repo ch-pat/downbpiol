@@ -10,6 +10,8 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.action_chains import ActionChains
 from application import postetools, drivertools, operations
 from application.webelements import Urls, Xpaths
+from application.gui import layouts, oneshot
+import PySimpleGUI as sg
 import time
 import os
 
@@ -17,6 +19,8 @@ import os
 SCRIPT_START = time.time()
 if __name__ == "__main__":
     AZIENDA, USERNAME, PASSWORD = postetools.get_credentials()
+    if (AZIENDA, USERNAME, PASSWORD) == (None, None, None):
+        AZIENDA, USERNAME, PASSWORD = oneshot.set_credentials_window()
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
 
     # False for Dev, True for release
