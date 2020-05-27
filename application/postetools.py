@@ -19,7 +19,7 @@ def extract_links_from_tabella_condomini(tabella_condomini) -> dict:
 def get_credentials() -> (str, str, str):
     '''
     needs a .credentials file in the directory
-    returns (azienda, username, password)
+    returns (azienda, username, password) or (None, None, None) if absent
     '''
     # Case for missing credentials / first run
     if not ".credentials" in os.listdir("application/config"):
