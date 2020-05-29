@@ -32,7 +32,7 @@ if __name__ == "__main__":
             AZIENDA, USERNAME, PASSWORD = oneshot.set_credentials_window()
         # Get login page and wait for it to load
         driver.get(Urls.LOGIN_PAGE)
-        wait = WebDriverWait(driver, 30)
+        wait = WebDriverWait(driver, 5)
         wait.until(EC.visibility_of_element_located((By.ID, "azienda")))
         
         print(f"OVERHEAD TIME: {time.time() - SCRIPT_START} SECONDS")
@@ -71,6 +71,7 @@ if __name__ == "__main__":
         pass
 
     # Lista condomini
+    wait = WebDriverWait(driver, 20)
     link_condomini_diz = operations.get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD)
 
     # FINESTRA PRINCIPALE
