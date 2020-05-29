@@ -14,6 +14,8 @@ def set_credentials_window() -> (str, str, str):
         [sg.B("Salva")]
     ]
     window = sg.Window("Inserisci credenziali di accesso a BPIOL", layout=layout)
-    _, values = window.read()
+    event, values = window.read()
     window.close()
+    if (values["-AZIENDA-"], values["-USERNAME-"], values["-PASSWORD-"]) == (None, None, None) or event == sg.WIN_CLOSED:
+        exit()
     return values["-AZIENDA-"], values["-USERNAME-"], values["-PASSWORD-"]

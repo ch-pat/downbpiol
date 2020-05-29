@@ -30,16 +30,6 @@ def get_credentials() -> (str, str, str):
         contents = f.read()
         creds = contents.splitlines()
     
-    # Offer the opportunity to reset credentials
-    print("Si sta per accedere con le seguenti credenziali:\n")
-    print(f"AZIENDA:\t{creds[0]}")
-    print(f"USERNAME:\t{creds[1]}")
-    print(f"PASSWORD:\t{'*' * len(creds[2])}")
-    prompt = input("Premere INVIO per confermare. Oppure, immettere Q per reimpostare le credenziali.")
-    if prompt in "qQ" and prompt != "":
-        return create_credentials()
-    
-    # Return already existing credentials if unmodified
     return creds[0], creds[1], creds[2]
 
 def calculate_start_date() -> (str, str, str):
@@ -53,7 +43,7 @@ def calculate_start_date() -> (str, str, str):
     start_date = cur - two_weeks
     return str(start_date.day), str(start_date.month), str(start_date.year)
 
-def create_credentials():
+def create_credentials(): # not called in GUI
     '''
     Routine for setting login credentials for the first time of when resetting them
     '''
@@ -69,3 +59,7 @@ def create_credentials():
         f.writelines(line + "\n" for line in (azienda, username, password))
     print("Credenziali salvate")
     return azienda, username, password
+
+def save_credentials(azienda: str, username: str, password: str):
+    with open("application/config/.credentials", "w+") as f:
+        f.writelines(line + "\n" for line in (azienda, username, password))

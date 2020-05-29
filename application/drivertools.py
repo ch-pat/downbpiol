@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from application.webelements import Urls, Xpaths
 import os
 import zipfile
 
@@ -56,3 +57,11 @@ def sanitize_filename(filename: str) -> str:
     for c in illegal_chars:
         filename = filename.replace(c, "")
     return filename
+
+
+def authentication_failed(driver: webdriver.Firefox):
+    failure = driver.find_elements_by_xpath(Xpaths.AUTENTICAZIONE_FALLITA)
+    if failure:
+        if "fallita" in failure[0].text:
+            return True
+    return False
