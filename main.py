@@ -30,8 +30,9 @@ if __name__ == "__main__":
 
     while True:  # Login loop
         AZIENDA, USERNAME, PASSWORD = postetools.get_credentials()
+        save_creds_flag = False
         if (AZIENDA, USERNAME, PASSWORD) == (None, None, None):
-            AZIENDA, USERNAME, PASSWORD = oneshot.set_credentials_window()
+            AZIENDA, USERNAME, PASSWORD, save_creds_flag = oneshot.set_credentials_window()
         # Get login page and wait for it to load
         driver.get(Urls.LOGIN_PAGE)
         wait = WebDriverWait(driver, 5)
@@ -66,10 +67,11 @@ if __name__ == "__main__":
                 sg.popup_error("Autenticazione fallita: verificare che le credenziali inserite siano corrette e riprovare.")
     
     # Se siamo qui, le credenziali inserite erano sicuramente corrette, salvale
-    try:
-        postetools.save_credentials(AZIENDA, USERNAME, PASSWORD)
-    except IOError:
-        pass
+    if save_creds_flag:
+        try:
+            postetools.save_credentials(AZIENDA, USERNAME, PASSWORD)
+        except IOError:
+            pass
 
     # Lista condomini
     wait = WebDriverWait(driver, 20)

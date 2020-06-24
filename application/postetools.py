@@ -56,7 +56,7 @@ def calculate_start_date() -> (str, str, str):
     start_date = cur - two_weeks
     return str(start_date.day), str(start_date.month), str(start_date.year)
 
-def create_credentials(): # not called in GUI
+""" def create_credentials(): # not called in GUI
     '''
     Routine for setting login credentials for the first time of when resetting them
     '''
@@ -71,7 +71,7 @@ def create_credentials(): # not called in GUI
     with open("application/config/.credentials", "w+") as f:
         f.writelines(line + "\n" for line in (azienda, username, password))
     print("Credenziali salvate")
-    return azienda, username, password
+    return azienda, username, password """
 
 def save_credentials(azienda: str, username: str, password: str):
     with open("config.json", "r") as f:
