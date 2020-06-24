@@ -21,10 +21,12 @@ SCRIPT_START = time.time()
 if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
     # False for Dev, True for release
-    headless = False
+    headless = True
     options = drivertools.set_options(headless)
 
+    postetools.init_folder()
     driver = webdriver.Firefox(executable_path=gecko, options=options)
+    print(f"OVERHEAD TIME: {time.time() - SCRIPT_START} SECONDS")
 
     while True:  # Login loop
         AZIENDA, USERNAME, PASSWORD = postetools.get_credentials()
@@ -35,7 +37,6 @@ if __name__ == "__main__":
         wait = WebDriverWait(driver, 5)
         wait.until(EC.visibility_of_element_located((By.ID, "azienda")))
         
-        print(f"OVERHEAD TIME: {time.time() - SCRIPT_START} SECONDS")
         # Find forms to fill
         form_azienda = driver.find_element_by_id("azienda")
         form_username = driver.find_element_by_id("username")

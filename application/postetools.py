@@ -1,7 +1,21 @@
 from datetime import datetime, timedelta
 from getpass import getpass
-import time, os
+import time, os, json
 
+
+def init_folder():
+    if "config.json" not in os.listdir():
+        with open("config.json", "w+") as f:
+            data = {
+                "azienda": None,
+                "username": None,
+                "password": None
+            }
+            json.dump(data, f, indent=2)
+    if not os.path.isdir("downloads"):
+        os.mkdir("downloads")
+        os.mkdir("downlaods/896")
+        os.mkdir("downloads/CBI")
 
 def extract_links_from_tabella_condomini(tabella_condomini) -> dict:
     '''
@@ -22,15 +36,14 @@ def get_credentials() -> (str, str, str):
     returns (azienda, username, password) or (None, None, None) if absent
     '''
     # Case for missing credentials / first run
-    if not ".credentials" in os.listdir("application/config"):
+    if not "config.json" in os.listdir():
         return None, None, None
 
     # Read existing credentials    
-    with open("application/config/.credentials", "r") as f:
-        contents = f.read()
-        creds = contents.splitlines()
+    with open("config.json", "r") as f:
+        contents = json.load(f)
     
-    return creds[0], creds[1], creds[2]
+    return contents["azienda"], contents["username"], contents["password"]
 
 def calculate_start_date() -> (str, str, str):
     '''
@@ -61,5 +74,8 @@ def create_credentials(): # not called in GUI
     return azienda, username, password
 
 def save_credentials(azienda: str, username: str, password: str):
-    with open("application/config/.credentials", "w+") as f:
-        f.writelines(line + "\n" for line in (azienda, username, password))
+    with open("config.json", "r") as f:
+        data = json.load(f)
+    data["azienda"], data["username"], data["password"] = azienda, username, password
+    with open("config.json", "w+") as f:
+        json.dump(data, f, indent=2)
