@@ -64,6 +64,8 @@ if __name__ == "__main__":
             # and the login failed because of this, or the website threw us an oddball
             # error (or connection has problems, but nothing can be done about this)
             if drivertools.authentication_failed:
+                # Delete previously saved credentials as to not block the account by repeated failed logins
+                postetools.save_credentials(None, None, None)
                 sg.popup_error("Autenticazione fallita: verificare che le credenziali inserite siano corrette e riprovare.")
     
     # Se siamo qui, le credenziali inserite erano sicuramente corrette, salvale
