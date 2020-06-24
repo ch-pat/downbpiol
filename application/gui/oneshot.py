@@ -14,8 +14,15 @@ def set_credentials_window() -> (str, str, str, bool):
         [sg.B("Invia", bind_return_key=True), sg.Checkbox("Memorizza le credenziali", default=False, key="-MEMORIZZA-")]
     ]
     window = sg.Window("Inserisci credenziali di accesso a BPIOL", layout=layout)
-    event, values = window.read()
+    while True:
+        event, values = window.read()
+        if event == sg.WIN_CLOSED:
+            window.close()
+            exit()
+
+        if event == "Invia":
+            if any((values["-AZIENDA-"] == "", values["-USERNAME-"] == "", values["-PASSWORD-"] == "")):
+                continue
+            return values["-AZIENDA-"], values["-USERNAME-"], values["-PASSWORD-"], values["-MEMORIZZA-"]
     window.close()
-    if (values["-AZIENDA-"], values["-USERNAME-"], values["-PASSWORD-"]) == (None, None, None) or event == sg.WIN_CLOSED:
-        exit()
-    return values["-AZIENDA-"], values["-USERNAME-"], values["-PASSWORD-"], values["-MEMORIZZA-"]
+        
