@@ -17,7 +17,6 @@ import time
 import os
 
 
-SCRIPT_START = time.time()
 if __name__ == "__main__":
     gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
     # False for Dev, True for release
@@ -26,7 +25,6 @@ if __name__ == "__main__":
 
     postetools.init_folder()
     driver = webdriver.Firefox(executable_path=gecko, options=options)
-    print(f"OVERHEAD TIME: {time.time() - SCRIPT_START} SECONDS")
 
     while True:  # Login loop
         AZIENDA, USERNAME, PASSWORD = postetools.get_credentials()
@@ -89,52 +87,94 @@ if __name__ == "__main__":
     #   altro?
     # Estrapolare il loop principale che segue in una funzione
     ############################
+    window = sg.Window("downBPIOL - Download CBI-896 da BPIOL", layouts.main_layout(link_condomini_diz))
+    while True:
+        event, values = window.read(timeout=200)
+        if event == sg.TIMEOUT_EVENT:
+            continue
 
-    # For loop that for each item in link_condomini_diz must:
-    # 1. download each item's bank account movements
-    # 2. download each item's 896 report (carefully choose starting date for these 2 items)
-    # 3. print(?) the bank account movements
-    for x in range(len(link_condomini_diz.keys())):
-        # Seleziona il condominio
-        nome_condo = list(link_condomini_diz.keys())[x]
-        print("Logging into: " + nome_condo)
+        if event == sg.WIN_CLOSED:
+            window.close()
+            driver.close()
+            exit()
+
+        if event == "-TUTTI-":
+            layouts.permute_checkboxes(window, values)
         
-        '''
-        XXX this is an *IMPORTANT* wait, as longer wait times seem to influence whether or not
-        XXX the login asks for app authentication or not, with shorter times making the
-        XXX authentication way more likely to be needed.
-        XXX (crazy spaghetti code, Poste Italiane)
-        '''
-        time.sleep(2) #XXX
-        link_condomini_diz[nome_condo].click()
-        time.sleep(2)
+        if event == "-SCARICA-":
+            SCRIPT_START = time.time()
 
-        # Rimuovi avvisi indipendentemente dalla loro presenza o meno
-        driver.get(Urls.URL_PER_PROSEGUIRE)
-        time.sleep(1)
+            chosen_downloads = postetools.chosen_downloads(values)
+            max_count = postetools.chosen_max_counter(chosen_downloads)
+            counter = 1
+            progress_bar = window["-BAR-"]
+            progress_bar.update_bar(counter, max=max_count)
 
-        # Vai a scarica movimenti
-        driver.get(Urls.URL_ESPORTA_MOVIMENTI)
-        time.sleep(1)
-        file_cbi = operations.scarica_movimenti(driver)
-        drivertools.rename_file(file_cbi, R"CBI\\" + nome_condo)
-        time.sleep(1)
-        print(f"Scaricato CBI per {nome_condo}...")
+            # For loop that for each item in link_condomini_diz must:
+            # 1. download each item's bank account movements
+            # 2. download each item's 896 report (carefully choose starting date for these 2 items)
+            # 3. print(?) the bank account movements
+            for x in range(len(link_condomini_diz.keys())):
+                # Seleziona il condominio
+                nome_condo = list(link_condomini_diz.keys())[x]
 
-        # Vai a scarica 896
-        driver.get(Urls.URL_ESPORTA_896)
-        time.sleep(1)
-        file_896 = operations.scarica_896(driver)
-        drivertools.rename_file(file_896, R"896\\" + nome_condo)
-        time.sleep(1)
-        print(f"Scaricato 896 per {nome_condo}...")
-        
-        # All done with the current condominio, go back to selection
-        print(f"Fine elaborazione per {nome_condo}")
-        driver.get(Urls.URL_CAMBIO_AZIENDA)
-        
-        #Re-get everything
-        link_condomini_diz = operations.get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD)
-        ###################
+                # Procedi solo se c'è qualcosa da scaricare
+                if chosen_downloads[nome_condo]["896"] or chosen_downloads[nome_condo]["CBI"]:
+                    counter = layouts.update_bar_message(f"Logging into: {nome_condo}", counter, window)
+                    print("Logging into: " + nome_condo)
+                    
+                    '''
+                    XXX this is an *IMPORTANT* wait, as longer wait times seem to influence whether or not
+                    XXX the login asks for app authentication or not, with shorter times making the
+                    XXX authentication way more likely to be needed.
+                    XXX (crazy spaghetti code, Poste Italiane)
+                    '''
+                    time.sleep(2) #XXX
+                    window.refresh()
+                    link_condomini_diz[nome_condo].click()
+                    time.sleep(2)
+                    window.refresh()
 
-print(f"EXECUTION COMPLETE AFTER {time.time() - SCRIPT_START} SECONDS")
+
+                    # Rimuovi avvisi indipendentemente dalla loro presenza o meno
+                    driver.get(Urls.URL_PER_PROSEGUIRE)
+                    time.sleep(1)
+                    window.refresh()
+
+
+                    if chosen_downloads[nome_condo]["CBI"]:
+                        # Vai a scarica movimenti
+                        driver.get(Urls.URL_ESPORTA_MOVIMENTI)
+                        time.sleep(1)
+                        window.refresh()
+
+                        file_cbi = operations.scarica_movimenti(driver)
+                        drivertools.rename_file(file_cbi, R"CBI\\" + nome_condo)
+                        time.sleep(1)
+                        window.refresh()
+                        counter = layouts.update_bar_message(f"Scaricato CBI per {nome_condo}...", counter, window)
+                        print(f"Scaricato CBI per {nome_condo}...")
+
+                    if chosen_downloads[nome_condo]["896"]:
+                        # Vai a scarica 896
+                        driver.get(Urls.URL_ESPORTA_896)
+                        time.sleep(1)
+                        window.refresh()
+                        file_896 = operations.scarica_896(driver)
+                        drivertools.rename_file(file_896, R"896\\" + nome_condo)
+                        time.sleep(1)
+                        window.refresh()
+                        counter = layouts.update_bar_message(f"Scaricato 896 per {nome_condo}...", counter, window)
+                        print(f"Scaricato 896 per {nome_condo}...")
+                    
+                    # All done with the current condominio, go back to selection
+                    counter = layouts.update_bar_message(f"Fine elaborazione per {nome_condo}", counter, window)
+                    print(f"Fine elaborazione per {nome_condo}")
+                    driver.get(Urls.URL_CAMBIO_AZIENDA)
+                    
+                    #Re-get everything
+                    link_condomini_diz = operations.get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD)
+                    ###################
+            window["-MESSAGE-"].update(f"Operazione completata in {time.time() - SCRIPT_START} secondi.")
+            print(f"EXECUTION COMPLETE AFTER {time.time() - SCRIPT_START} SECONDS")
+

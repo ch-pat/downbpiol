@@ -79,3 +79,33 @@ def save_credentials(azienda: str, username: str, password: str):
     data["azienda"], data["username"], data["password"] = azienda, username, password
     with open("config.json", "w+") as f:
         json.dump(data, f, indent=2)
+
+def chosen_downloads(values: dict) -> dict:
+    """
+    Takes values from the PySimpleGUI window and returns a dict with the chosen downloads formatted as:
+    {
+        "condo1": {"896": True, "CBI": True},
+        "condo2": ...
+    }
+
+    this function and the corresponding dict could be expanded to include "last downloaded dates", which can be saved into the config file
+    """
+    chosen = {}
+    for k in values.keys():
+        if isinstance(k, tuple):
+            chosen[k[1]] = {"896": None, "CBI": None}
+    for k in values.keys():
+        if isinstance(k, tuple):
+            chosen[k[1]][k[0]] = values[k]
+    return chosen
+
+def chosen_max_counter(chosen_downloads: dict) -> int:
+    items = 0
+    for k in chosen_downloads.keys():
+        if chosen_downloads[k]["896"] or chosen_downloads[k]["CBI"]:
+            items += 2
+        if chosen_downloads[k]["896"]:
+            items += 1
+        if chosen_downloads[k]["CBI"]:
+            items += 1
+    return items
