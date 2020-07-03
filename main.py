@@ -18,13 +18,23 @@ import os
 
 
 if __name__ == "__main__":
-    gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
     # False for Dev, True for release
     headless = True
-    options = drivertools.set_options(headless)
-
     postetools.init_folder()
-    driver = webdriver.Firefox(executable_path=gecko, options=options)
+
+    driver_to_use = drivertools.locate_driver()
+    if driver_to_use is None:
+        sg.popup_error("Non è stato trovato né geckodriver, né chromedriver nella cartella di esecuzione.\nScaricare il file da uno dei seguenti link\n--Chrome: https://chromedriver.chromium.org/downloads \n--Firefox: https://github.com/mozilla/geckodriver/releases")
+        exit()
+    if driver_to_use == "Firefox":
+        gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
+        options = drivertools.set_options(headless, driver_to_use)
+        driver = webdriver.Firefox(executable_path=gecko, options=options)
+
+    if driver_to_use == "Chrome":
+        chromedriver = os.path.normpath(os.path.join(os.path.dirname(__file__), "chromedriver.exe"))
+        option = drivertools.set_options(headless, driver_to_use)
+        driver = webdriver.Chrome(executable_path=chromedriver, chrome_options=option)
 
     while True:  # Login loop
         AZIENDA, USERNAME, PASSWORD = postetools.get_credentials()
