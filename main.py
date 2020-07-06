@@ -12,6 +12,7 @@ from selenium.common.exceptions import TimeoutException
 from application import postetools, drivertools, operations
 from application.webelements import Urls, Xpaths
 from application.gui import layouts, oneshot
+import sys
 import PySimpleGUI as sg
 import time
 import os
@@ -25,7 +26,7 @@ if __name__ == "__main__":
     driver_to_use = drivertools.locate_driver()
     if driver_to_use is None:
         sg.popup_error("Non è stato trovato né geckodriver, né chromedriver nella cartella di esecuzione.\nScaricare il file da uno dei seguenti link\n--Chrome: https://chromedriver.chromium.org/downloads \n--Firefox: https://github.com/mozilla/geckodriver/releases")
-        exit()
+        sys.exit()
     if driver_to_use == "Firefox":
         gecko = os.path.normpath(os.path.join(os.path.dirname(__file__), "geckodriver.exe"))
         options = drivertools.set_options(headless, driver_to_use)
@@ -106,7 +107,7 @@ if __name__ == "__main__":
         if event == sg.WIN_CLOSED:
             window.close()
             driver.close()
-            exit()
+            sys.exit()
 
         if event == "-TUTTI-":
             layouts.permute_checkboxes(window, values)
