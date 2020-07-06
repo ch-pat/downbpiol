@@ -14,7 +14,7 @@ def init_folder():
             json.dump(data, f, indent=2)
     if not os.path.isdir("downloads"):
         os.mkdir("downloads")
-        os.mkdir("downlaods/896")
+        os.mkdir("downloads/896")
         os.mkdir("downloads/CBI")
 
 def extract_links_from_tabella_condomini(tabella_condomini) -> dict:
