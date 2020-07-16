@@ -23,6 +23,7 @@ def set_credentials_window() -> (str, str, str, bool):
         if event == "Invia":
             if any((values["-AZIENDA-"] == "", values["-USERNAME-"] == "", values["-PASSWORD-"] == "")):
                 continue
+            window.close()
             return values["-AZIENDA-"], values["-USERNAME-"], values["-PASSWORD-"], values["-MEMORIZZA-"]
     window.close()
         
