@@ -22,3 +22,28 @@ The script simply simulates the normal usage of a browser, and therefore **does 
 Despite all this, there is **no guarantee that the service provider won't punish you for using this script**, and I hold no responsibility whatsoever for your use of the script. You are fully responsible and knowingly take the risk by using this script.
 
 The script might break anytime the BPIOL website updates its layout, or when Firefox updates to a new version.
+
+# Change to selenium service.py
+C:\Users\[USER]\Anaconda3\Lib\site-packages\selenium\webdriver\common\service.py
+
+Must change start() function as follows for completely headless run
+
+```
+def start(self):
+        """
+        Starts the Service.
+
+        :Exceptions:
+         - WebDriverException : Raised either when it can't start the service
+           or when it can't connect to the service
+        """
+        try:
+            cmd = [self.path]
+            cmd.extend(self.command_line_args())
+            self.process = subprocess.Popen(cmd, env=self.env,
+                                            shell=False,
+                                            stdout=PIPE,
+                                            stderr=PIPE,
+                                            stdin=PIPE,
+                                            creationflags=0x08000000)
+```
