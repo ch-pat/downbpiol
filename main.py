@@ -20,7 +20,7 @@ import os
 
 if __name__ == "__main__":
     # False for Dev, True for release
-    headless = False
+    headless = True
     postetools.init_folder()
 
     driver_to_use = drivertools.locate_driver()
