@@ -20,7 +20,7 @@ import os
 
 if __name__ == "__main__":
     # False for Dev, True for release
-    headless = True
+    headless = False
     postetools.init_folder()
 
     driver_to_use = drivertools.locate_driver()
@@ -62,20 +62,25 @@ if __name__ == "__main__":
         form_pwd.send_keys(PASSWORD)
         form_pwd.send_keys(Keys.RETURN)
 
-        # Premere continua
-        try:  # try to press continue after successful login
-            wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.CONTINUA)))
-            continua_login_btn = driver.find_element_by_xpath(Xpaths.CONTINUA)
-            continua_login_btn.click()
-            break  # break out of the loop, login is successful
+        try:
+            # O siamo alla lista condomini, o siamo in attesa di premere Continua
+            wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))
+            break
         except TimeoutException:
-            # There are 2 causes for a Timeout here, either the credentials were wrong
-            # and the login failed because of this, or the website threw us an oddball
-            # error (or connection has problems, but nothing can be done about this)
-            if drivertools.authentication_failed:
-                # Delete previously saved credentials as to not block the account by repeated failed logins
-                postetools.save_credentials(None, None, None)
-                sg.popup_error("Autenticazione fallita: verificare che le credenziali inserite siano corrette e riprovare.")
+            # Premere continua
+            try:  # try to press continue after successful login
+                wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.CONTINUA)))
+                continua_login_btn = driver.find_element_by_xpath(Xpaths.CONTINUA)
+                continua_login_btn.click()
+                break  # break out of the loop, login is successful
+            except TimeoutException:
+                # There are 2 causes for a Timeout here, either the credentials were wrong
+                # and the login failed because of this, or the website threw us an oddball
+                # error (or connection has problems, but nothing can be done about this)
+                if drivertools.authentication_failed(driver):
+                    # Delete previously saved credentials as to not block the account by repeated failed logins
+                    postetools.save_credentials(None, None, None)
+                    sg.popup_error("Autenticazione fallita: verificare che le credenziali inserite siano corrette e riprovare.")
     
     # Se siamo qui, le credenziali inserite erano sicuramente corrette, salvale
     if save_creds_flag:

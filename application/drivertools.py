@@ -41,7 +41,7 @@ def set_options(headless: bool, driver_to_use: str) -> Options:
                  "directory_upgrade": True
                  }
         options.headless = headless
-        options.add_argument("--log-level=3")
+        options.add_argument("--log-level=OFF")
         options.add_experimental_option("prefs", prefs)
         return options
 
