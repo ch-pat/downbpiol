@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import sys
 
 
 def set_credentials_window() -> (str, str, str, bool):
@@ -18,7 +19,7 @@ def set_credentials_window() -> (str, str, str, bool):
         event, values = window.read()
         if event == sg.WIN_CLOSED:
             window.close()
-            exit()
+            sys.exit()
 
         if event == "Invia":
             if any((values["-AZIENDA-"] == "", values["-USERNAME-"] == "", values["-PASSWORD-"] == "")):
