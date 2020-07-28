@@ -45,10 +45,11 @@ def set_options(headless: bool, driver_to_use: str) -> Options:
         options.add_experimental_option("prefs", prefs)
         return options
 
-def rename_file(original, condo_name):
-    original = sanitize_filename(original)
+def rename_file(original, content_type, condo_name):
+    """content_type in ['896', 'CBI']"""
+    condo_name = sanitize_filename(condo_name)
     original_file = os.path.join(DOWNLOAD_PATH, original)
-    new_name = os.path.join(DOWNLOAD_PATH, condo_name + ".txt")
+    new_name = os.path.join(DOWNLOAD_PATH, content_type + "\\" + condo_name + ".txt")
     extracted_file = os.path.join(DOWNLOAD_PATH, unzip_file(original_file))
     if os.path.exists(new_name):
         os.remove(new_name)
@@ -86,3 +87,6 @@ def locate_driver() -> str:
     if "geckodriver.exe" in d:
         return "Firefox"
     return None
+
+if __name__ == "__main__":
+    print(rename_file("asdrubale.zip", "CBI", "vattelapesca 12 / 14"))

@@ -165,7 +165,7 @@ if __name__ == "__main__":
                         window.refresh()
 
                         file_cbi = operations.scarica_movimenti(driver)
-                        drivertools.rename_file(file_cbi, R"CBI\\" + nome_condo)
+                        drivertools.rename_file(file_cbi, "CBI", nome_condo)
                         time.sleep(1)
                         window.refresh()
                         counter = layouts.update_bar_message(f"Scaricato CBI per {nome_condo}...", counter, window)
@@ -177,7 +177,7 @@ if __name__ == "__main__":
                         time.sleep(1)
                         window.refresh()
                         file_896 = operations.scarica_896(driver)
-                        drivertools.rename_file(file_896, R"896\\" + nome_condo)
+                        drivertools.rename_file(file_896, "896", nome_condo)
                         time.sleep(1)
                         window.refresh()
                         counter = layouts.update_bar_message(f"Scaricato 896 per {nome_condo}...", counter, window)
