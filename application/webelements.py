@@ -21,3 +21,4 @@ class Xpaths():
     ULTIMO_896 = "/html/body/div[1]/table[1]/tbody/tr[3]/td/div/table[2]/tbody/tr/td/table/tbody/tr/td/table[2]/tbody/tr/td[2]/a"
     NOME_ULTIMO_896 = "/html/body/div[1]/table[1]/tbody/tr[3]/td/div/table[2]/tbody/tr/td/table/tbody/tr/td/table[2]/tbody/tr/td[1]"
     CONTINUA_ERRORE_GENERICO = "/html/body/div[3]/div/div/div/div/div/div/div/div/div/div/div/div[2]/div/p[2]/button"
+    AUTENTICAZIONE_FALLITA = "/html/body/div[4]/div[1]/div/div[1]/div/div/div/div/div/form/div[1]/div/div/div/h3"

@@ -48,6 +48,11 @@ def scarica_movimenti(pagina_movimenti) -> str:
     time.sleep(1)
     pagina_movimenti.back()
 
+    # chrome's .back() method takes driver back out of the frame
+    if isinstance(pagina_movimenti, webdriver.Chrome):
+        wait.until(EC.frame_to_be_available_and_switch_to_it(((By.NAME, "frSERVIZI"))))
+        wait.until(EC.frame_to_be_available_and_switch_to_it(((By.NAME, "frMAIN"))))
+
     # Go to download page
     wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.MOVIMENTI_FORM_GIORNO)))
     giorno_inizio = pagina_movimenti.find_element_by_xpath(Xpaths.MOVIMENTI_FORM_GIORNO)
