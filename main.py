@@ -20,7 +20,7 @@ import os
 
 if __name__ == "__main__":
     # False for Dev, True for release
-    headless = True
+    headless = False
     postetools.init_folder()
 
     driver_to_use = drivertools.locate_driver()
@@ -44,7 +44,7 @@ if __name__ == "__main__":
             AZIENDA, USERNAME, PASSWORD, save_creds_flag = oneshot.set_credentials_window()
         # Get login page and wait for it to load
         driver.get(Urls.LOGIN_PAGE)
-        wait = WebDriverWait(driver, 5)
+        wait = WebDriverWait(driver, 120) # timeouts in 2 minutes
         wait.until(EC.visibility_of_element_located((By.ID, "azienda")))
         
         # Find forms to fill
@@ -62,9 +62,13 @@ if __name__ == "__main__":
         form_pwd.send_keys(PASSWORD)
         form_pwd.send_keys(Keys.RETURN)
 
+        ##NEW
+        # A questo punto una notifica viene inviata al telefono (app BPIOL KEY)
+        # premere tasto autorizza
         try:
-            # O siamo alla lista condomini, o siamo in attesa di premere Continua
-            wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))
+            wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.AUTORIZZA_APP_BPIOLKEY)))  # Se autorizza con successo manda a lista condomini
+            autorizza_btn = driver.find_element_by_xpath(Xpaths.AUTORIZZA_APP_BPIOLKEY)
+            autorizza_btn.click()
             break
         except TimeoutException:
             # Premere continua
@@ -81,7 +85,17 @@ if __name__ == "__main__":
                     # Delete previously saved credentials as to not block the account by repeated failed logins
                     postetools.save_credentials(None, None, None)
                     sg.popup_error("Autenticazione fallita: verificare che le credenziali inserite siano corrette e riprovare.")
-    
+        
+    try:
+        # Dovremmo essere alla tabella condomini, se non ci siamo c'è qualcosa che non va
+        wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))
+    except TimeoutException:
+        # Per qualche motivo non siamo arrivati alla lista condomini dopo l'autorizzazione app (utente non ha autorizzato entro 5 minuti?)
+        sg.popup_error("Autorizzazione da App BPIOLKEY non pervenuta entro 2 minuti.\n"
+                        "Se è certo di aver autorizzato, allora è avvenuto un errore imprevisto e si consiglia di effettuare il login manualmente.")
+        sys.exit()
+
+
     # Se siamo qui, le credenziali inserite erano sicuramente corrette, salvale
     if save_creds_flag:
         try:
