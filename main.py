@@ -71,7 +71,7 @@ if __name__ == "__main__":
             autorizza_btn.click()
             break
         except TimeoutException:
-            # Premere continua
+            # Premere continua TODO: REWORKARE QUI UN PO
             try:  # try to press continue after successful login
                 wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.CONTINUA)))
                 continua_login_btn = driver.find_element_by_xpath(Xpaths.CONTINUA)
