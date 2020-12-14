@@ -42,9 +42,11 @@ if __name__ == "__main__":
         save_creds_flag = False
         if (AZIENDA, USERNAME, PASSWORD) == (None, None, None):
             AZIENDA, USERNAME, PASSWORD, save_creds_flag = oneshot.set_credentials_window()
+            if (AZIENDA, USERNAME, PASSWORD, save_creds_flag) == (False, False, False, False):  # User quits out
+                driver.quit()
         # Get login page and wait for it to load
         driver.get(Urls.LOGIN_PAGE)
-        wait = WebDriverWait(driver, 120) # timeouts in 2 minutes
+        wait = WebDriverWait(driver, 5)
         wait.until(EC.visibility_of_element_located((By.ID, "azienda")))
         
         # Find forms to fill
@@ -62,41 +64,35 @@ if __name__ == "__main__":
         form_pwd.send_keys(PASSWORD)
         form_pwd.send_keys(Keys.RETURN)
 
-        ##NEW
-        # A questo punto una notifica viene inviata al telefono (app BPIOL KEY)
-        # premere tasto autorizza
+        # Two Factor Authentication required here (app BPIOL KEY)
         try:
-            wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.AUTORIZZA_APP_BPIOLKEY)))  # Se autorizza con successo manda a lista condomini
+            # Press authorize button
+            wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.AUTORIZZA_APP_BPIOLKEY)))  # If successful, goes to condomini list
             autorizza_btn = driver.find_element_by_xpath(Xpaths.AUTORIZZA_APP_BPIOLKEY)
             autorizza_btn.click()
             break
         except TimeoutException:
-            # Premere continua TODO: REWORKARE QUI UN PO
-            try:  # try to press continue after successful login
-                wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.CONTINUA)))
-                continua_login_btn = driver.find_element_by_xpath(Xpaths.CONTINUA)
-                continua_login_btn.click()
-                break  # break out of the loop, login is successful
-            except TimeoutException:
-                # There are 2 causes for a Timeout here, either the credentials were wrong
-                # and the login failed because of this, or the website threw us an oddball
-                # error (or connection has problems, but nothing can be done about this)
-                if drivertools.authentication_failed(driver):
-                    # Delete previously saved credentials as to not block the account by repeated failed logins
-                    postetools.save_credentials(None, None, None)
-                    sg.popup_error("Autenticazione fallita: verificare che le credenziali inserite siano corrette e riprovare.")
+            # The credentials probably were wrong and the login failed because of this
+            if drivertools.authentication_failed(driver):
+                # Delete previously saved credentials as to not block the account by repeated failed logins
+                postetools.save_credentials(None, None, None)
+                sg.popup_error("Autenticazione fallita: verificare che le credenziali inserite siano corrette e riprovare.")
+            else:
+                sg.popup_error("Errore non previsto in fase di autenticazione, si consiglia di verificare provando ad accedere manualmente.")
         
     try:
-        # Dovremmo essere alla tabella condomini, se non ci siamo c'è qualcosa che non va
+        # Should be at condomini list, or something went very wrong
+        wait = WebDriverWait(driver, 120)  # Allow 2 minutes to authorize on the smartphone
         wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))
     except TimeoutException:
-        # Per qualche motivo non siamo arrivati alla lista condomini dopo l'autorizzazione app (utente non ha autorizzato entro 5 minuti?)
+        # For some reason we're not at the condomini list after authorization (user failed to auth within 2 minutes?)
         sg.popup_error("Autorizzazione da App BPIOLKEY non pervenuta entro 2 minuti.\n"
                         "Se è certo di aver autorizzato, allora è avvenuto un errore imprevisto e si consiglia di effettuare il login manualmente.")
+        driver.quit()
         sys.exit()
 
 
-    # Se siamo qui, le credenziali inserite erano sicuramente corrette, salvale
+    # If we got here (after condomini list) then credentials must be valid, save them.
     if save_creds_flag:
         try:
             postetools.save_credentials(AZIENDA, USERNAME, PASSWORD)
@@ -104,7 +100,7 @@ if __name__ == "__main__":
             pass
 
     # Lista condomini
-    wait = WebDriverWait(driver, 20)
+    wait = WebDriverWait(driver, 20)  # Lower the wait
     link_condomini_diz = operations.get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD)
 
     # FINESTRA PRINCIPALE
@@ -125,7 +121,7 @@ if __name__ == "__main__":
 
         if event == sg.WIN_CLOSED:
             window.close()
-            driver.close()
+            driver.quit()
             sys.exit()
 
         if event == "-TUTTI-":

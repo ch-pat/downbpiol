@@ -19,8 +19,7 @@ def set_credentials_window() -> (str, str, str, bool):
         event, values = window.read()
         if event == sg.WIN_CLOSED:
             window.close()
-            sys.exit()
-
+            return False, False, False, False
         if event == "Invia":
             if any((values["-AZIENDA-"] == "", values["-USERNAME-"] == "", values["-PASSWORD-"] == "")):
                 continue
