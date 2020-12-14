@@ -44,6 +44,7 @@ if __name__ == "__main__":
             AZIENDA, USERNAME, PASSWORD, save_creds_flag = oneshot.set_credentials_window()
             if (AZIENDA, USERNAME, PASSWORD, save_creds_flag) == (False, False, False, False):  # User quits out
                 driver.quit()
+                sys.exit()
         # Get login page and wait for it to load
         driver.get(Urls.LOGIN_PAGE)
         wait = WebDriverWait(driver, 5)
