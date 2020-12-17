@@ -12,6 +12,7 @@ from selenium.common.exceptions import TimeoutException
 from application import postetools, drivertools, operations
 from application.webelements import Urls, Xpaths
 from application.gui import layouts, oneshot
+from selenium.common.exceptions import WebDriverException
 import sys
 import PySimpleGUI as sg
 import time
@@ -70,7 +71,10 @@ if __name__ == "__main__":
             # Press authorize button
             wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.AUTORIZZA_APP_BPIOLKEY)))  # If successful, goes to condomini list
             autorizza_btn = driver.find_element_by_xpath(Xpaths.AUTORIZZA_APP_BPIOLKEY)
-            autorizza_btn.click()
+            try:
+                autorizza_btn.click()
+            except WebDriverException:
+                driver.execute_script("arguments[0].click();", autorizza_btn)  # works through obscuring elements, might want to test on windows
             break
         except TimeoutException:
             # The credentials probably were wrong and the login failed because of this
