@@ -52,7 +52,7 @@ def calculate_start_date() -> (str, str, str):
     --next versions must keep track of latest download via script
     '''
     cur = datetime.today()
-    two_weeks = timedelta(days=15)
+    two_weeks = timedelta(days=30)
     start_date = cur - two_weeks
     return str(start_date.day), str(start_date.month), str(start_date.year)
 
