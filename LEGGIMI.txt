@@ -1,0 +1,39 @@
+Istruzioni per l'uso:
+
+Dopo aver spacchettato il file .zip, posizionare la cartella intera, contenente i file "main", "geckodriver" o "chromedriver" e la cartella "application", in un luogo facile da ricordare (es: Desktop)
+
+
+Il programma funziona SOLO su Windows a 64 bit -- se avete Windows 10 e il vostro computer non è antico, probabilmente va bene.
+
+
+Per avviare il programma, fare doppio click sul file "main" e seguire le istruzioni su schermo. Nel caso in cui compaia una finestra di riga di comando, lasciarla aperta in quanto chiuderla corrisponde a chiudere il programma.
+
+
+In seguito al recente cambiamento di poste è ora necessario utilizzare un account abilitato con APP BPIOLKEY. 
+Se non si utilizza già un account del genere, occorre crearlo e prima di utilizzare il programma occorre entrare manualmente in ogni condominio almeno una volta per autenticare l'utente con APP BPIOLKEY.
+Una volta preparato un account in questo modo, è possibile utilizzarlo per il programma. 
+L'unico intervento da parte dell'utente sarà l'autorizzazione tramite APP BPIOLKEY all'inizio dell'esecuzione, quindi sarà necessario avere il telefono associato all'account di poste che si sta utilizzando per dare l'autorizzazione a proseguire.
+Una volta autorizzato, si arriverà alla lista condomini e si potrà selezionare cosa scaricare attraverso l'interfaccia grafica, ed il programma procederà al download in automatico.
+
+
+Per la segnalazione di errori scrivere su clienti@condominiomartellucci.it con oggetto "[ERRORE]" e spiegare come meglio possibile come riprodurre l'errore.
+Si consiglia sempre di provare ad accedere manualmente in caso di errore per verificarne la causa (potrebbe essere necessario aggiornare la password, ad esempio).
+In caso di errore del programma, per meglio comprendere la causa dell'errore è possibile utilizzare il file "main-visibile", che apre firefox/chrome su schermo ed è possibile vedere a quale punto dell'esecuzione il programma si blocca.
+Se si utilizza "main-visibile" occorre evitare di interagire con la finestra che prosegue in automatico, al fine di evitare errori causati dall'interazione.
+
+
+############## IN CASO DI ERRORE IMMEDIATO ALL'AVVIO DA UN GIORNO ALL'ALTRO #############
+
+Se il programma smette di funzionare "all'improvviso" da un giorno all'altro, l'ipotesi più probabile è che chromedriver sia da aggiornare. 
+
+Occorre andare a questa pagina: https://chromedriver.chromium.org/
+
+Scaricare la "latest stable release"
+
+Dalla pagina successiva selezionare la versione win-32
+
+Estrarre lo zip scaricato; contiene un file denominato "chromedriver.exe".
+
+Sostituire il file con lo stesso nome nella cartella del programma e assicurarsi che anche google chrome sia aggiornato (aprire chrome > cliccare sui 3 puntini in alto a destra > guida > informazioni su google chrome (da qui chrome controlla se è presente un aggiornamento))
+
+Per funzionare correttamente, il programma richiede che chromedriver e google chrome siano entrambi aggiornati, pertanto a volte si incontrerà questo errore perchè chrome tende ad aggiornarsi da solo senza avvisare.
