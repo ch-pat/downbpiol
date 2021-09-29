@@ -41,6 +41,7 @@ def permute_checkboxes(window: sg.Window, values: dict):
 def max_height():
     temp_window = sg.Window("tmp", [[]], alpha_channel=0, finalize=True)
     _, h = temp_window.get_screen_dimensions()
+    temp_window.close()
     del temp_window
     if h < 900:
         return 500
