@@ -47,3 +47,6 @@ def start(self):
                                             stdin=PIPE,
                                             creationflags=0x08000000)
 ```
+
+# Compiling
+`pyinstaller --noupx --onedir --onefile --windowed main.py`
