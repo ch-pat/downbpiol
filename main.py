@@ -20,7 +20,7 @@ import os
 
 if __name__ == "__main__":
     # False for Dev, True for release
-    headless = False
+    headless = True
     postetools.init_folder()
 
     driver_to_use = drivertools.locate_driver()
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         driver = webdriver.Firefox(executable_path=gecko, options=options)
 
     if driver_to_use == "Chrome":
-        chromedriver = os.path.normpath(os.path.join(os.path.dirname(__file__), "chromedriver.exe"))
+        chromedriver = "./chromedriver.exe" # os.path.normpath(os.path.join(os.path.dirname(__file__), "chromedriver.exe"))
         service = drivertools.set_service(chromedriver)
         option = drivertools.set_options(headless, driver_to_use)
         driver = webdriver.Chrome(service=service, options=option)

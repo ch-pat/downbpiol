@@ -49,6 +49,8 @@ def set_options(headless: bool, driver_to_use: str) -> Options:
         options.headless = headless
         options.add_argument("--log-level=3")
         options.add_experimental_option("prefs", prefs)
+        if headless:
+            options.add_argument("--headless=new")
         return options
 
 def rename_file(original, content_type, condo_name):
