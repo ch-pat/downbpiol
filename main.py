@@ -34,8 +34,9 @@ if __name__ == "__main__":
 
     if driver_to_use == "Chrome":
         chromedriver = os.path.normpath(os.path.join(os.path.dirname(__file__), "chromedriver.exe"))
+        service = drivertools.set_service(chromedriver)
         option = drivertools.set_options(headless, driver_to_use)
-        driver = webdriver.Chrome(executable_path=chromedriver, chrome_options=option)
+        driver = webdriver.Chrome(service=service, options=option)
 
     while True:  # Login loop
         AZIENDA, USERNAME, PASSWORD = postetools.get_credentials()
@@ -51,9 +52,9 @@ if __name__ == "__main__":
         wait.until(EC.visibility_of_element_located((By.ID, "azienda")))
         
         # Find forms to fill
-        form_azienda = driver.find_element_by_id("azienda")
-        form_username = driver.find_element_by_id("username")
-        form_pwd = driver.find_element_by_id("password")
+        form_azienda = driver.find_element(By.ID, "azienda")
+        form_username = driver.find_element(By.ID, "username")
+        form_pwd = driver.find_element(By.ID, "password")
         time.sleep(2)
         
         # Fill forms (clear them to be safe)
@@ -69,7 +70,7 @@ if __name__ == "__main__":
         try:
             # Press authorize button
             wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.AUTORIZZA_APP_BPIOLKEY)))  # If successful, goes to condomini list
-            autorizza_btn = driver.find_element_by_xpath(Xpaths.AUTORIZZA_APP_BPIOLKEY)
+            autorizza_btn = driver.find_element(By.XPATH, Xpaths.AUTORIZZA_APP_BPIOLKEY)
             autorizza_btn.click()
             break
         except TimeoutException:

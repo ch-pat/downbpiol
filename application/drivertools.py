@@ -1,11 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.common.by import By
 from application.webelements import Urls, Xpaths
 import os
 import zipfile
 
 
 DOWNLOAD_PATH = os.path.join(os.path.abspath(os.curdir), "downloads")
+
+def set_service(chromedriver_path: str):
+    service = webdriver.ChromeService(executable_path=chromedriver_path)
+    return service
+
 
 def set_options(headless: bool, driver_to_use: str) -> Options:
     '''
@@ -73,7 +79,7 @@ def sanitize_filename(filename: str) -> str:
 
 
 def authentication_failed(driver: webdriver.Firefox):
-    failure = driver.find_elements_by_xpath(Xpaths.AUTENTICAZIONE_FALLITA)
+    failure = driver.find_elements(By.XPATH, Xpaths.AUTENTICAZIONE_FALLITA)
     if failure:
         if "fallita" in failure[0].text:
             return True

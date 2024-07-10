@@ -21,12 +21,12 @@ def scarica_movimenti(pagina_movimenti) -> str:
 
     # Operate on the form
     wait.until(EC.presence_of_element_located ((By.ID, "rapporti")))
-    options = Select(pagina_movimenti.find_element_by_id("rapporti"))
+    options = Select(pagina_movimenti.find_element(By.ID, "rapporti"))
     options.select_by_index(1)
 
     # Fill form date
     d, m, y = postetools.calculate_start_date()
-    giorno_inizio = pagina_movimenti.find_element_by_xpath(Xpaths.MOVIMENTI_FORM_GIORNO)
+    giorno_inizio = pagina_movimenti.find_element(By.XPATH, Xpaths.MOVIMENTI_FORM_GIORNO)
     giorno_inizio.clear()
     giorno_inizio.send_keys(d)
     giorno_inizio.send_keys(Keys.TAB)
@@ -55,7 +55,7 @@ def scarica_movimenti(pagina_movimenti) -> str:
 
     # Go to download page
     wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.MOVIMENTI_FORM_GIORNO)))
-    giorno_inizio = pagina_movimenti.find_element_by_xpath(Xpaths.MOVIMENTI_FORM_GIORNO)
+    giorno_inizio = pagina_movimenti.find_element(By.XPATH, Xpaths.MOVIMENTI_FORM_GIORNO)
     giorno_inizio.clear()
     giorno_inizio.send_keys(d)
     actions = ActionChains(pagina_movimenti)
@@ -73,9 +73,9 @@ def scarica_movimenti(pagina_movimenti) -> str:
 
     # Download file
     wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.ULTIMO_CBI)))
-    download_button = pagina_movimenti.find_element_by_xpath(Xpaths.ULTIMO_CBI)
+    download_button = pagina_movimenti.find_element(By.XPATH, Xpaths.ULTIMO_CBI)
     download_button.click()
-    filename = pagina_movimenti.find_element_by_xpath(Xpaths.NOME_ULTIMO_CBI).text
+    filename = pagina_movimenti.find_element(By.XPATH, Xpaths.NOME_ULTIMO_CBI).text
     time.sleep(1)
 
     return filename
@@ -88,12 +88,12 @@ def scarica_896(pagina_896) -> str:
 
     # Choose account from drop down
     wait.until(EC.presence_of_element_located((By.ID, "idAccount")))
-    options = Select(pagina_896.find_element_by_id("idAccount"))
-    options.select_by_index(1)
+    options = Select(pagina_896.find_element(By.ID, "idAccount"))
+    options.select_by_index(0)
 
     # Fill form date
     d, m, y = postetools.calculate_start_date()
-    giorno_inizio = pagina_896.find_element_by_xpath(Xpaths.FORM_GIORNO_896)
+    giorno_inizio = pagina_896.find_element(By.XPATH, Xpaths.FORM_GIORNO_896)
     giorno_inizio.clear()
     giorno_inizio.send_keys(d)
     giorno_inizio.send_keys(Keys.TAB)
@@ -118,7 +118,7 @@ def scarica_896(pagina_896) -> str:
 
     # Go to download page
     wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.FORM_GIORNO_896)))
-    giorno_inizio = pagina_896.find_element_by_xpath(Xpaths.FORM_GIORNO_896)
+    giorno_inizio = pagina_896.find_element(By.XPATH, Xpaths.FORM_GIORNO_896)
     giorno_inizio.clear()
     giorno_inizio.send_keys(d)
     giorno_inizio.send_keys(Keys.TAB)
@@ -139,9 +139,9 @@ def scarica_896(pagina_896) -> str:
 
     # Download file
     wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.ULTIMO_896)))
-    download_button = pagina_896.find_element_by_xpath(Xpaths.ULTIMO_896)
+    download_button = pagina_896.find_element(By.XPATH, Xpaths.ULTIMO_896)
     download_button.click()
-    filename = pagina_896.find_element_by_xpath(Xpaths.NOME_ULTIMO_896).text
+    filename = pagina_896.find_element(By.XPATH, Xpaths.NOME_ULTIMO_896).text
     time.sleep(1)
 
     return filename
@@ -154,19 +154,19 @@ def get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD) -> dict:
     wait = WebDriverWait(driver, 30)
     try:
         wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))    
-        tabella_condomini = driver.find_element_by_xpath(Xpaths.TABELLA_CONDOMINI)
+        tabella_condomini = driver.find_element(By.XPATH, Xpaths.TABELLA_CONDOMINI)
         link_condomini_diz = postetools.extract_links_from_tabella_condomini(tabella_condomini)
         return link_condomini_diz
     except:
         wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.CONTINUA_ERRORE_GENERICO)))  
-        continua_btn = driver.find_element_by_xpath(Xpaths.CONTINUA_ERRORE_GENERICO)  
+        continua_btn = driver.find_element(By.XPATH, Xpaths.CONTINUA_ERRORE_GENERICO)  
         continua_btn.click()
         
         # Ci riporta alla pagina di login, rifacciamo il login
         wait.until(EC.visibility_of_element_located((By.ID, "azienda")))
-        form_azienda = driver.find_element_by_id("azienda")
-        form_username = driver.find_element_by_id("username")
-        form_pwd = driver.find_element_by_id("password")
+        form_azienda = driver.find_element(By.ID, "azienda")
+        form_username = driver.find_element(By.ID, "username")
+        form_pwd = driver.find_element(By.ID, "password")
         time.sleep(2)
 
         form_azienda.clear()
@@ -178,11 +178,11 @@ def get_condo_link_dict(driver, AZIENDA, USERNAME, PASSWORD) -> dict:
         form_pwd.send_keys(Keys.RETURN)
 
         wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.CONTINUA)))
-        continua_login_btn = driver.find_element_by_xpath(Xpaths.CONTINUA)
+        continua_login_btn = driver.find_element(By.XPATH, Xpaths.CONTINUA)
         continua_login_btn.click()
 
         wait.until(EC.visibility_of_element_located((By.XPATH, Xpaths.TABELLA_CONDOMINI)))    
-        tabella_condomini = driver.find_element_by_xpath(Xpaths.TABELLA_CONDOMINI)
+        tabella_condomini = driver.find_element(By.XPATH, Xpaths.TABELLA_CONDOMINI)
         link_condomini_diz = postetools.extract_links_from_tabella_condomini(tabella_condomini)
         return link_condomini_diz
 
