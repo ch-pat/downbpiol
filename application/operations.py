@@ -74,6 +74,12 @@ def scarica_movimenti(pagina_movimenti) -> str:
     # Download file
     wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.ULTIMO_CBI)))
     download_button = pagina_movimenti.find_element(By.XPATH, Xpaths.ULTIMO_CBI)
+
+
+    print(download_button.tag_name)
+    print(download_button.get_attribute("href"))
+    print(download_button.get_attribute("onclick"))
+
     download_button.click()
     filename = pagina_movimenti.find_element(By.XPATH, Xpaths.NOME_ULTIMO_CBI).text
     time.sleep(1)

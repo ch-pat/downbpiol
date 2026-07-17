@@ -20,7 +20,7 @@ import os
 
 if __name__ == "__main__":
     # False for Dev, True for release
-    headless = True
+    headless = False
     postetools.init_folder()
 
     driver_to_use = drivertools.locate_driver()
@@ -71,6 +71,7 @@ if __name__ == "__main__":
             # Press authorize button
             wait.until(EC.element_to_be_clickable((By.XPATH, Xpaths.AUTORIZZA_APP_BPIOLKEY)))  # If successful, goes to condomini list
             autorizza_btn = driver.find_element(By.XPATH, Xpaths.AUTORIZZA_APP_BPIOLKEY)
+            time.sleep(2)
             autorizza_btn.click()
             break
         except TimeoutException:

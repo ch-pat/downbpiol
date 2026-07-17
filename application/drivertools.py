@@ -43,11 +43,14 @@ def set_options(headless: bool, driver_to_use: str) -> Options:
     if driver_to_use == "Chrome":
         options = webdriver.ChromeOptions()
         prefs = {"profile.default_content_settings.popups": 0,
-                 "download.default_directory": DOWNLOAD_PATH + "\\", # IMPORTANT - ENDING SLASH V IMPORTANT
-                 "directory_upgrade": True
+                 "download.default_directory": DOWNLOAD_PATH,
+                 "download.prompt_for_download": False,
+                 "download.directory_upgrade": True,
+                 "safebrowsing.enabled": True
                  }
         options.headless = headless
         options.add_argument("--log-level=3")
+        options.add_argument("--disable-popup-blocking")
         options.add_experimental_option("prefs", prefs)
         if headless:
             options.add_argument("--headless=new")
